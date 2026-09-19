@@ -1,0 +1,25 @@
+{
+    "name": "modules/glitter-workflow",
+    "description": "Workflow & Automation Module for Gnuboard7",
+    "type": "library",
+  "version": "0.18.0",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Glitter.kr"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Glitter\\Workflow\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\Glitter\\Workflow\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.2"
+    }
+}

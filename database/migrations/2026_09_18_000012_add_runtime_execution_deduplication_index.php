@@ -1,0 +1,3 @@
+<?php
+use Illuminate\Database\Migrations\Migration;use Illuminate\Database\Schema\Blueprint;use Illuminate\Support\Facades\Schema;
+return new class extends Migration{public function up():void{if(!Schema::hasTable('glitter_workflow_executions'))return;Schema::table('glitter_workflow_executions',function(Blueprint $t){$t->unique(['acceptance_id','workflow_id','workflow_version'],'gw_exec_acceptance_workflow_version_uniq');});}public function down():void{if(!Schema::hasTable('glitter_workflow_executions'))return;Schema::table('glitter_workflow_executions',function(Blueprint $t){$t->dropUnique('gw_exec_acceptance_workflow_version_uniq');});}};

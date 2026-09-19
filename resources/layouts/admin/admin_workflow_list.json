@@ -1,0 +1,338 @@
+{
+  "version": "1.0.0",
+  "layout_name": "admin_workflow_list",
+  "permissions": ["glitter-workflow.workflows.read"],
+  "extends": "_admin_base",
+  "meta": {
+    "title": "$t:glitter-workflow.admin.workflows.index.title",
+    "description": "$t:glitter-workflow.admin.workflows.index.description"
+  },
+  "state": {"searchQuery": ""},
+  "init_actions": [{"handler": "setState", "params": {"target": "global", "_local": {"searchQuery": "{{query.search || ''}}"}}}],
+  "transition_overlay": {"wait_for": ["workflows"]},
+  "data_sources": [
+    {
+      "id": "workflows",
+      "label_key": "$t:glitter-workflow.editor.data_source.workflows",
+      "type": "api",
+      "endpoint": "/api/modules/glitter-workflow/admin/workflows",
+      "method": "GET",
+      "auto_fetch": true,
+      "auth_required": true,
+      "refetchOnMount": true,
+      "loading_strategy": "progressive",
+      "params": {
+        "page": "{{query.page ?? 1}}",
+        "per_page": "{{query.per_page ?? 20}}",
+        "status": "{{query.status ?? ''}}",
+        "trigger_key": "{{query.trigger_key ?? ''}}",
+        "search": "{{query.search ?? ''}}"
+      },
+      "errorHandling": {
+        "403": {"handler": "showErrorPage", "params": {"target": "content"}},
+        "default": {"handler": "showErrorPage", "params": {"target": "content"}}
+      },
+      "fallback": {
+        "data": {
+          "data": [],
+          "pagination": {
+            "current_page": 1,
+            "per_page": 20,
+            "from": null,
+            "to": null,
+            "has_more_pages": false,
+            "last_page": 1,
+            "total": 0
+          },
+          "abilities": {"can_create": false}
+        }
+      }
+    }
+  ],
+  "slots": {
+    "content": [
+      {
+        "id": "admin_workflow_list_content",
+        "type": "basic",
+        "name": "Div",
+        "props": {"className": "admin-page-content"},
+        "children": [
+          {
+            "id": "page_header",
+            "type": "composite",
+            "name": "PageHeader",
+            "props": {
+              "title": "$t:glitter-workflow.admin.workflows.index.title",
+              "description": "$t:glitter-workflow.admin.workflows.index.description"
+            },
+            "children": [
+              {
+                "id": "create_workflow_button",
+                "type": "basic",
+                "name": "Button",
+                "if": "{{workflows?.data?.abilities?.can_create === true}}",
+                "props": {"className": "btn btn-primary"},
+                "actions": [
+                  {
+                    "type": "click",
+                    "handler": "navigate",
+                    "params": {
+                      "path": "/admin/glitter-workflow/workflows/create",
+                      "mergeQuery": true,
+                      "query": {}
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "id": "create_workflow_icon",
+                    "type": "basic",
+                    "name": "Icon",
+                    "props": {"name": "plus", "size": "sm"}
+                  },
+                  {
+                    "id": "create_workflow_label",
+                    "type": "basic",
+                    "name": "Span",
+                    "text": "$t:glitter-workflow.admin.workflows.create"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "workflow_filters",
+            "type": "basic",
+            "name": "Div",
+            "props": {"className": "admin-card workflow-list-filters"},
+            "children": [
+              {
+                "id": "workflow_status_filter",
+                "type": "basic",
+                "name": "Div",
+                "props": {"className": "form-group"},
+                "children": [
+                  {"type": "basic", "name": "Label", "props": {"className": "form-label"}, "text": "$t:glitter-workflow.admin.workflows.index.filters.status.label"},
+                  {
+                    "id": "workflow_status_select",
+                    "type": "basic",
+                    "name": "Select",
+                    "props": {
+                      "name": "status",
+                      "value": "{{query.status ?? ''}}",
+                      "options": [
+                        {"label": "$t:glitter-workflow.admin.workflows.index.filters.status.all", "value": ""},
+                        {"label": "$t:glitter-workflow.admin.workflows.index.filters.status.active", "value": "active"},
+                        {"label": "$t:glitter-workflow.admin.workflows.index.filters.status.inactive", "value": "inactive"}
+                      ]
+                    },
+                    "actions": [{"type": "change", "handler": "navigate", "params": {"path": "/admin/glitter-workflow/workflows", "mergeQuery": true, "replace": true, "query": {"status": "{{$event.target.value}}", "trigger_key": "{{query.trigger_key ?? ''}}", "page": "1"}, "transition_overlay_target": "workflows_data_grid__body"}}]
+                  }
+                ]
+              },
+              {
+                "id": "workflow_trigger_filter",
+                "type": "basic",
+                "name": "Div",
+                "props": {"className": "form-group"},
+                "children": [
+                  {"type": "basic", "name": "Label", "props": {"className": "form-label"}, "text": "$t:glitter-workflow.admin.workflows.index.filters.trigger.label"},
+                  {
+                    "id": "workflow_trigger_select",
+                    "type": "basic",
+                    "name": "Select",
+                    "props": {
+                      "name": "trigger_key",
+                      "value": "{{query.trigger_key ?? ''}}",
+                      "options": [
+                        {"label": "$t:glitter-workflow.admin.workflows.index.filters.trigger.all", "value": ""},
+                        {"label": "$t:glitter-workflow.admin.workflows.triggers.user_registered", "value": "user.registered"},
+                        {"label": "$t:glitter-workflow.admin.workflows.triggers.user_updated", "value": "user.updated"},
+                        {"label": "$t:glitter-workflow.admin.workflows.triggers.board_post_created", "value": "board.post.created"},
+                        {"label": "$t:glitter-workflow.admin.workflows.triggers.board_comment_created", "value": "board.comment.created"}
+                      ]
+                    },
+                    "actions": [{"type": "change", "handler": "navigate", "params": {"path": "/admin/glitter-workflow/workflows", "mergeQuery": true, "replace": true, "query": {"status": "{{query.status ?? ''}}", "trigger_key": "{{$event.target.value}}", "page": "1"}, "transition_overlay_target": "workflows_data_grid__body"}}]
+                  }
+                ]
+              },
+              {
+                "id": "workflow_search",
+                "type": "composite",
+                "name": "SearchBar",
+                "props": {
+                  "placeholder": "$t:glitter-workflow.admin.workflows.index.filters.search.placeholder",
+                  "value": "{{_local.searchQuery || ''}}",
+                  "className": "w-64"
+                },
+                "actions": [
+                  {"type": "change", "handler": "setState", "params": {"searchQuery": "{{$event.target.value}}"}},
+                  {"type": "submit", "handler": "navigate", "params": {"path": "/admin/glitter-workflow/workflows", "mergeQuery": true, "replace": true, "query": {"search": "{{_local.searchQuery || undefined}}", "page": "1"}, "transition_overlay_target": "workflows_data_grid__body"}}
+                ]
+              }
+            ]
+          },
+          {
+            "id": "workflow_empty_state_container",
+            "type": "basic",
+            "name": "Div",
+            "if": "{{(workflows?.data?.data ?? []).length === 0}}",
+            "props": {"className": "admin-card flex flex-col items-center"},
+            "children": [
+              {
+                "id": "workflow_empty_state",
+                "type": "composite",
+                "name": "EmptyState",
+                "props": {
+                  "title": "$t:glitter-workflow.admin.workflows.index.empty_title",
+                  "description": "$t:glitter-workflow.admin.workflows.index.empty_description"
+                }
+              },
+              {
+                "id": "empty_create_workflow_button",
+                "type": "basic",
+                "name": "Button",
+                "if": "{{workflows?.data?.abilities?.can_create === true}}",
+                "props": {"className": "btn btn-primary"},
+                "actions": [
+                  {
+                    "type": "click",
+                    "handler": "navigate",
+                    "params": {
+                      "path": "/admin/glitter-workflow/workflows/create",
+                      "mergeQuery": true,
+                      "query": {}
+                    }
+                  }
+                ],
+                "children": [
+                  {
+                    "id": "empty_create_workflow_icon",
+                    "type": "basic",
+                    "name": "Icon",
+                    "props": {"name": "plus", "size": "sm"}
+                  },
+                  {
+                    "id": "empty_create_workflow_label",
+                    "type": "basic",
+                    "name": "Span",
+                    "text": "$t:glitter-workflow.admin.workflows.create"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "workflows_data_grid",
+            "type": "composite",
+            "name": "DataGrid",
+            "if": "{{(workflows?.data?.data ?? []).length > 0}}",
+            "blur_until_loaded": true,
+            "props": {
+              "columns": [
+                {
+                  "field": "name",
+                  "header": "$t:glitter-workflow.admin.workflows.name",
+                  "sortable": false,
+                  "required": true
+                },
+                {
+                  "field": "trigger_key",
+                  "header": "$t:glitter-workflow.admin.workflows.index.columns.trigger",
+                  "sortable": false,
+                  "cellChildren": [
+                    {
+                      "id": "workflow_trigger_user_registered",
+                      "type": "basic",
+                      "name": "Span",
+                      "if": "{{row.trigger_key === 'user.registered'}}",
+                      "text": "$t:glitter-workflow.admin.workflows.triggers.user_registered"
+                    },
+                    {
+                      "id": "workflow_trigger_user_updated",
+                      "type": "basic",
+                      "name": "Span",
+                      "if": "{{row.trigger_key === 'user.updated'}}",
+                      "text": "$t:glitter-workflow.admin.workflows.triggers.user_updated"
+                    },
+                    {
+                      "id": "workflow_trigger_board_post_created",
+                      "type": "basic",
+                      "name": "Span",
+                      "if": "{{row.trigger_key === 'board.post.created'}}",
+                      "text": "$t:glitter-workflow.admin.workflows.triggers.board_post_created"
+                    },
+                    {
+                      "id": "workflow_trigger_board_comment_created",
+                      "type": "basic",
+                      "name": "Span",
+                      "if": "{{row.trigger_key === 'board.comment.created'}}",
+                      "text": "$t:glitter-workflow.admin.workflows.triggers.board_comment_created"
+                    }
+                  ]
+                },
+                {
+                  "field": "is_active",
+                  "header": "$t:glitter-workflow.admin.workflows.index.columns.status",
+                  "sortable": false,
+                  "cellChildren": [
+                    {
+                      "id": "workflow_status_active",
+                      "type": "basic",
+                      "name": "Span",
+                      "if": "{{row.is_active === true}}",
+                      "props": {"className": "badge badge-green"},
+                      "text": "$t:glitter-workflow.admin.workflows.index.status.active"
+                    },
+                    {
+                      "id": "workflow_status_inactive",
+                      "type": "basic",
+                      "name": "Span",
+                      "if": "{{row.is_active !== true}}",
+                      "props": {"className": "badge badge-gray"},
+                      "text": "$t:glitter-workflow.admin.workflows.index.status.inactive"
+                    }
+                  ]
+                }
+              ],
+              "data": "{{workflows?.data?.data}}",
+              "pagination": true,
+              "alwaysShowPagination": true,
+              "pageSize": "{{workflows?.data?.pagination?.per_page ?? 20}}",
+              "serverSidePagination": true,
+              "serverCurrentPage": "{{workflows?.data?.pagination?.current_page ?? 1}}",
+              "serverTotalPages": "{{workflows?.data?.pagination?.last_page ?? 1}}",
+              "serverHasMorePages": "{{workflows?.data?.pagination?.has_more_pages ?? false}}",
+              "idField": "uuid",
+              "responsiveBreakpoint": 768
+            },
+            "actions": [
+              {
+                "event": "onRowClick",
+                "type": "click",
+                "handler": "navigate",
+                "params": {
+                  "path": "/admin/glitter-workflow/workflows/{{$args[0].uuid}}",
+                  "mergeQuery": true,
+                  "query": {}
+                }
+              },
+              {
+                "event": "onPageChange",
+                "type": "change",
+                "handler": "navigate",
+                "params": {
+                  "path": "/admin/glitter-workflow/workflows",
+                  "mergeQuery": true,
+                  "replace": true,
+                  "query": {"page": "{{$args[0]}}"},
+                  "transition_overlay_target": "workflows_data_grid__body"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

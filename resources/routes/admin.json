@@ -1,0 +1,68 @@
+{
+    "version": "1.0.0",
+    "routes": [
+        {
+            "path": "*/admin/glitter-workflow/workflows/create",
+            "layout": "admin_workflow_create",
+            "auth_required": true,
+            "meta": {
+                "title": "$t:glitter-workflow.admin.workflows.create_page.title",
+                "permission": "glitter-workflow.workflows.create"
+            }
+        },
+        {
+            "path": "*/admin/glitter-workflow/workflows/:uuid/edit",
+            "layout": "admin_workflow_edit",
+            "auth_required": true,
+            "meta": {
+                "title": "$t:glitter-workflow.admin.workflows.edit_page.title",
+                "permission": "glitter-workflow.workflows.update"
+            }
+        },
+        {
+            "path": "*/admin/glitter-workflow/workflows/:uuid",
+            "layout": "admin_workflow_detail",
+            "auth_required": true,
+            "meta": {
+                "title": "$t:glitter-workflow.admin.workflows.detail.title",
+                "permission": "glitter-workflow.workflows.read"
+            }
+        },
+        {
+            "path": "*/admin/glitter-workflow/workflows",
+            "layout": "admin_workflow_list",
+            "auth_required": true,
+            "meta": {
+                "title": "$t:glitter-workflow.admin.workflows.index.title",
+                "permission": "glitter-workflow.workflows.read"
+            }
+        },
+        {
+            "path": "*/admin/glitter-workflow/executions/:uuid",
+            "layout": "admin_execution_detail",
+            "auth_required": true,
+            "meta": {
+                "title": "$t:glitter-workflow.admin.executions.detail.title",
+                "permission": "glitter-workflow.executions.read"
+            }
+        },
+        {
+            "path": "*/admin/glitter-workflow/executions",
+            "layout": "admin_execution_list",
+            "auth_required": true,
+            "meta": {
+                "title": "$t:glitter-workflow.admin.executions.index.title",
+                "permission": "glitter-workflow.executions.read"
+            }
+        },
+        {
+            "path": "*/admin/glitter-workflow/settings",
+            "layout": "admin_workflow_settings",
+            "auth_required": true,
+            "meta": {
+                "title": "$t:glitter-workflow.admin.settings.title",
+                "permission": "glitter-workflow.settings.read"
+            }
+        }
+    ]
+}

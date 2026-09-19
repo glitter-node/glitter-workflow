@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "routes": [
+    {
+      "path": "*/admin/glitter-workflow/workflows",
+      "layout": "workflow_list",
+      "auth_required": true,
+      "meta": {
+        "title": "$t:glitter-workflow.admin.workflows.title"
+      }
+    },
+    {
+      "path": "*/admin/glitter-workflow/workflows/create",
+      "layout": "workflow_editor",
+      "auth_required": true,
+      "meta": {
+        "title": "$t:glitter-workflow.admin.workflows.create"
+      }
+    },
+    {
+      "path": "*/admin/glitter-workflow/workflows/:id/edit",
+      "layout": "workflow_editor",
+      "auth_required": true,
+      "meta": {
+        "title": "$t:glitter-workflow.admin.workflows.edit"
+      }
+    }
+  ]
+}

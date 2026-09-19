@@ -1,0 +1,89 @@
+{
+  "version": "1.0.0",
+  "layout_name": "admin_execution_list",
+  "permissions": ["glitter-workflow.executions.read"],
+  "extends": "_admin_base",
+  "meta": {
+    "title": "$t:glitter-workflow.admin.executions.index.title",
+    "description": "$t:glitter-workflow.admin.executions.index.description"
+  },
+  "transition_overlay": {"wait_for": ["executions"]},
+  "data_sources": [{
+    "id": "executions",
+    "label_key": "$t:glitter-workflow.editor.data_source.executions",
+    "type": "api",
+    "endpoint": "/api/modules/glitter-workflow/admin/executions",
+    "method": "GET",
+    "auto_fetch": true,
+    "auth_required": true,
+    "refetchOnMount": true,
+    "loading_strategy": "progressive",
+    "params": {"page": "{{query.page ?? 1}}", "per_page": "{{query.per_page ?? 20}}", "status": "{{query.status ?? ''}}", "trigger_key": "{{query.trigger_key ?? ''}}"},
+    "errorHandling": {
+      "403": {"handler": "showErrorPage", "params": {"target": "content"}},
+      "default": {"handler": "showErrorPage", "params": {"target": "content"}}
+    },
+    "fallback": {"data": {"data": [], "pagination": {"current_page": 1, "per_page": 20, "from": null, "to": null, "has_more_pages": false, "last_page": 1, "total": 0}}}
+  }],
+  "slots": {"content": [{
+    "id": "admin_execution_list_content",
+    "type": "basic",
+    "name": "Div",
+    "props": {"className": "admin-page-content"},
+    "children": [
+      {"id": "page_header", "type": "composite", "name": "PageHeader", "props": {"title": "$t:glitter-workflow.admin.executions.index.title", "description": "$t:glitter-workflow.admin.executions.index.description"}},
+      {"id": "execution_filters", "type": "basic", "name": "Div", "props": {"className": "admin-card execution-list-filters"}, "children": [
+        {"id": "execution_status_filter", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [
+          {"type": "basic", "name": "Label", "props": {"className": "form-label"}, "text": "$t:glitter-workflow.admin.executions.index.filters.status.label"},
+          {"id": "execution_status_select", "type": "basic", "name": "Select", "props": {"name": "status", "value": "{{query.status ?? ''}}", "options": [
+            {"label": "$t:glitter-workflow.admin.executions.index.filters.status.all", "value": ""},
+            {"label": "$t:glitter-workflow.admin.executions.index.filters.status.pending", "value": "pending"},
+            {"label": "$t:glitter-workflow.admin.executions.index.filters.status.scheduled", "value": "scheduled"},
+            {"label": "$t:glitter-workflow.admin.executions.index.filters.status.running", "value": "running"},
+            {"label": "$t:glitter-workflow.admin.executions.index.filters.status.succeeded", "value": "succeeded"},
+            {"label": "$t:glitter-workflow.admin.executions.index.filters.status.failed", "value": "failed"},
+            {"label": "$t:glitter-workflow.admin.executions.index.filters.status.cancelled", "value": "cancelled"},
+            {"label": "$t:glitter-workflow.admin.executions.index.filters.status.skipped", "value": "skipped"}
+          ]}, "actions": [{"type": "change", "handler": "navigate", "params": {"path": "/admin/glitter-workflow/executions", "mergeQuery": true, "replace": true, "query": {"status": "{{$event.target.value}}", "trigger_key": "{{query.trigger_key ?? ''}}", "page": "1"}, "transition_overlay_target": "executions_data_grid__body"}}]}
+        ]},
+        {"id": "execution_trigger_filter", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [
+          {"type": "basic", "name": "Label", "props": {"className": "form-label"}, "text": "$t:glitter-workflow.admin.executions.index.filters.trigger.label"},
+          {"id": "execution_trigger_select", "type": "basic", "name": "Select", "props": {"name": "trigger_key", "value": "{{query.trigger_key ?? ''}}", "options": [
+            {"label": "$t:glitter-workflow.admin.executions.index.filters.trigger.all", "value": ""},
+            {"label": "$t:glitter-workflow.admin.workflows.triggers.user_registered", "value": "user.registered"},
+            {"label": "$t:glitter-workflow.admin.workflows.triggers.user_updated", "value": "user.updated"},
+            {"label": "$t:glitter-workflow.admin.workflows.triggers.board_post_created", "value": "board.post.created"},
+            {"label": "$t:glitter-workflow.admin.workflows.triggers.board_comment_created", "value": "board.comment.created"}
+          ]}, "actions": [{"type": "change", "handler": "navigate", "params": {"path": "/admin/glitter-workflow/executions", "mergeQuery": true, "replace": true, "query": {"status": "{{query.status ?? ''}}", "trigger_key": "{{$event.target.value}}", "page": "1"}, "transition_overlay_target": "executions_data_grid__body"}}]}
+        ]}
+      ]},
+      {"id": "execution_empty_state_container", "type": "basic", "name": "Div", "if": "{{(executions?.data?.data ?? []).length === 0}}", "props": {"className": "admin-card"}, "children": [
+        {"id": "execution_empty_state", "type": "composite", "name": "EmptyState", "props": {"title": "$t:glitter-workflow.admin.executions.index.empty_title", "description": "$t:glitter-workflow.admin.executions.index.empty_description"}}
+      ]},
+      {"id": "executions_data_grid", "type": "composite", "name": "DataGrid", "if": "{{(executions?.data?.data ?? []).length > 0}}", "blur_until_loaded": true, "props": {
+        "columns": [
+          {"field": "uuid", "header": "$t:glitter-workflow.admin.executions.columns.uuid", "sortable": false, "required": true},
+          {"field": "workflow_name", "header": "$t:glitter-workflow.admin.executions.columns.workflow", "sortable": false, "required": true},
+          {"field": "trigger_key", "header": "$t:glitter-workflow.admin.executions.columns.trigger", "sortable": false},
+          {"field": "status", "header": "$t:glitter-workflow.admin.executions.columns.status", "sortable": false},
+          {"field": "created_at", "header": "$t:glitter-workflow.admin.executions.columns.created", "sortable": false},
+          {"field": "started_at", "header": "$t:glitter-workflow.admin.executions.columns.started", "sortable": false},
+          {"field": "finished_at", "header": "$t:glitter-workflow.admin.executions.columns.completed", "sortable": false}
+        ],
+        "data": "{{executions?.data?.data}}",
+        "pagination": true,
+        "alwaysShowPagination": true,
+        "pageSize": "{{executions?.data?.pagination?.per_page ?? 20}}",
+        "serverSidePagination": true,
+        "serverCurrentPage": "{{executions?.data?.pagination?.current_page ?? 1}}",
+        "serverTotalPages": "{{executions?.data?.pagination?.last_page ?? 1}}",
+        "serverHasMorePages": "{{executions?.data?.pagination?.has_more_pages ?? false}}",
+        "idField": "uuid",
+        "responsiveBreakpoint": 768
+      }, "actions": [
+        {"event": "onRowClick", "type": "click", "handler": "navigate", "params": {"path": "/admin/glitter-workflow/executions/{{$args[0].uuid}}", "mergeQuery": true, "query": {}}},
+        {"event": "onPageChange", "type": "change", "handler": "navigate", "params": {"path": "/admin/glitter-workflow/executions", "mergeQuery": true, "query": {"page": "{{$args[0]}}"}, "transition_overlay_target": "executions_data_grid__body"}}
+      ]}
+    ]
+  }]}
+}

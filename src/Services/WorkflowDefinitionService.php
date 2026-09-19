@@ -1,0 +1,12 @@
+<?php
+namespace Modules\Glitter\Workflow\Services;
+use App\Extension\HookManager; use Illuminate\Support\Facades\Auth; use Illuminate\Support\Facades\DB; use Modules\Glitter\Workflow\Models\Workflow; use Modules\Glitter\Workflow\Repositories\WorkflowRepositoryInterface; use Symfony\Component\HttpKernel\Exception\ConflictHttpException; use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+class WorkflowDefinitionService {
+ public function __construct(private WorkflowRepositoryInterface $repo, private WorkflowDefinitionValidator $validator){}
+ public function list(array $filters=[],int $perPage=20){return $this->repo->paginate($filters,$perPage);}
+ public function get(string $uuid): Workflow {return $this->repo->findByUuid($uuid) ?? throw new NotFoundHttpException('Workflow not found.');}
+ public function create(array $data): Workflow { $n=$this->validator->validate($data); return DB::transaction(function()use($n){$id=Auth::id();$w=$this->repo->create($n+['version'=>1,'is_active'=>false,'created_by'=>$id,'updated_by'=>$id]); HookManager::doAction('glitter-workflow.workflow.after_create',$w,$n); return $w;}); }
+ public function update(Workflow $w,array $data): Workflow { if(array_key_exists('is_active',$data))throw new ConflictHttpException('Activation must use the activation endpoint.'); $version=$data['version']??$w->version; unset($data['version']); $n=$this->validator->validate($data); return DB::transaction(function()use($w,$n,$version){$id=Auth::id();$ok=$this->repo->update($w,$n+['version'=>DB::raw('version + 1'),'updated_by'=>$id],(int)$version); if(!$ok)throw new ConflictHttpException('Workflow version is stale.'); $fresh=$this->get($w->uuid); HookManager::doAction('glitter-workflow.workflow.after_update',$fresh,$n); return $fresh;}); }
+ public function setActive(Workflow $w,bool $active): Workflow { if($active)$this->validator->validate(['name'=>$w->name,'trigger_key'=>$w->trigger_key,'trigger_config'=>$w->trigger_config??[],'condition_tree'=>$w->condition_tree,'action_plan'=>$w->action_plan]); return DB::transaction(function()use($w,$active){$id=Auth::id();$this->repo->update($w,['is_active'=>$active,'updated_by'=>$id]);$fresh=$this->get($w->uuid);HookManager::doAction($active?'glitter-workflow.workflow.after_activate':'glitter-workflow.workflow.after_deactivate',$fresh);return $fresh;}); }
+ public function delete(Workflow $w): void {DB::transaction(function()use($w){$this->repo->delete($w);HookManager::doAction('glitter-workflow.workflow.after_delete',$w);});}
+}

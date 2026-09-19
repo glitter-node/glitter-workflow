@@ -1,0 +1,57 @@
+{
+  "version": "1.0.0",
+  "layout_name": "admin_workflow_detail",
+  "permissions": ["glitter-workflow.workflows.read"],
+  "extends": "_admin_base",
+  "meta": {"title": "$t:glitter-workflow.admin.workflows.detail.title", "description": "$t:glitter-workflow.admin.workflows.detail.description"},
+  "transition_overlay": {"wait_for": ["workflow"]},
+  "data_sources": [{"id": "workflow", "type": "api", "endpoint": "/api/modules/glitter-workflow/admin/workflows/{{route?.uuid}}", "method": "GET", "auto_fetch": true, "auth_required": true, "refetchOnMount": true, "errorHandling": {"403": {"handler": "showErrorPage", "params": {"target": "content"}}, "default": {"handler": "showErrorPage", "params": {"target": "content"}}}}],
+  "slots": {"content": [{"id": "admin_workflow_detail_content", "type": "basic", "name": "Div", "props": {"className": "admin-page-content"}, "children": [
+    {"id": "page_header", "type": "composite", "name": "PageHeader", "props": {"title": "$t:glitter-workflow.admin.workflows.detail.title", "description": "$t:glitter-workflow.admin.workflows.detail.description"}, "children": [
+      {"id": "edit", "type": "basic", "name": "Button", "if": "{{workflow?.data?.abilities?.can_update === true}}", "props": {"className": "btn btn-secondary"}, "actions": [{"type": "click", "handler": "navigate", "params": {"path": "/admin/glitter-workflow/workflows/{{route?.uuid}}/edit", "mergeQuery": true}}], "children": [{"id": "edit_label", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.edit"}]},
+      {"id": "activate", "type": "basic", "name": "Button", "if": "{{workflow?.data?.is_active !== true && workflow?.data?.abilities?.can_activate === true}}", "props": {"className": "btn btn-primary"}, "actions": [{"type": "click", "handler": "apiCall", "auth_required": true, "target": "/api/modules/glitter-workflow/admin/workflows/{{route?.uuid}}/activate", "params": {"method": "POST"}, "confirm": "$t:glitter-workflow.admin.workflows.activate_confirm", "onSuccess": [{"handler": "refetchDataSource", "params": {"dataSourceId": "workflow"}}, {"handler": "toast", "params": {"type": "success", "message": "$t:glitter-workflow.admin.workflows.activate_success"}}], "onError": [{"handler": "toast", "params": {"type": "error", "message": "$t:glitter-workflow.admin.workflows.lifecycle_error"}}]}], "children": [{"id": "activate_label", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.activate"}]},
+      {"id": "deactivate", "type": "basic", "name": "Button", "if": "{{workflow?.data?.is_active === true && workflow?.data?.abilities?.can_activate === true}}", "props": {"className": "btn btn-secondary"}, "actions": [{"type": "click", "handler": "apiCall", "auth_required": true, "target": "/api/modules/glitter-workflow/admin/workflows/{{route?.uuid}}/deactivate", "params": {"method": "POST"}, "confirm": "$t:glitter-workflow.admin.workflows.deactivate_confirm", "onSuccess": [{"handler": "refetchDataSource", "params": {"dataSourceId": "workflow"}}, {"handler": "toast", "params": {"type": "success", "message": "$t:glitter-workflow.admin.workflows.deactivate_success"}}], "onError": [{"handler": "toast", "params": {"type": "error", "message": "$t:glitter-workflow.admin.workflows.lifecycle_error"}}]}], "children": [{"id": "deactivate_label", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.deactivate"}]},
+      {"id": "delete", "type": "basic", "name": "Button", "if": "{{workflow?.data?.abilities?.can_delete === true}}", "props": {"className": "btn btn-danger"}, "actions": [{"type": "click", "handler": "apiCall", "auth_required": true, "target": "/api/modules/glitter-workflow/admin/workflows/{{route?.uuid}}", "params": {"method": "DELETE"}, "confirm": "$t:glitter-workflow.admin.workflows.delete_confirm", "onSuccess": [{"handler": "toast", "params": {"type": "success", "message": "$t:glitter-workflow.admin.workflows.delete_success"}}, {"handler": "navigate", "params": {"path": "/admin/glitter-workflow/workflows", "replace": true}}], "onError": [{"handler": "toast", "params": {"type": "error", "message": "$t:glitter-workflow.admin.workflows.lifecycle_error"}}]}], "children": [{"id": "delete_label", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.delete"}]}
+    ]},
+    {"id": "workflow_summary", "type": "basic", "name": "Div", "props": {"className": "admin-card workflow-summary"}, "children": [
+      {"id": "workflow_name", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.detail.name|value={{workflow?.data?.name ?? ''}}"},
+      {"id": "workflow_trigger_label", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.detail.trigger"},
+      {"id": "workflow_trigger_user_registered", "type": "basic", "name": "Span", "if": "{{workflow?.data?.trigger_key === 'user.registered'}}", "text": "$t:glitter-workflow.admin.workflows.triggers.user_registered"},
+      {"id": "workflow_trigger_user_updated", "type": "basic", "name": "Span", "if": "{{workflow?.data?.trigger_key === 'user.updated'}}", "text": "$t:glitter-workflow.admin.workflows.triggers.user_updated"},
+      {"id": "workflow_trigger_board_post_created", "type": "basic", "name": "Span", "if": "{{workflow?.data?.trigger_key === 'board.post.created'}}", "text": "$t:glitter-workflow.admin.workflows.triggers.board_post_created"},
+      {"id": "workflow_trigger_board_comment_created", "type": "basic", "name": "Span", "if": "{{workflow?.data?.trigger_key === 'board.comment.created'}}", "text": "$t:glitter-workflow.admin.workflows.triggers.board_comment_created"},
+      {"id": "workflow_status_active", "type": "basic", "name": "Span", "if": "{{workflow?.data?.is_active === true}}", "text": "$t:glitter-workflow.admin.workflows.detail.status_active"},
+      {"id": "workflow_status_inactive", "type": "basic", "name": "Span", "if": "{{workflow?.data?.is_active !== true}}", "text": "$t:glitter-workflow.admin.workflows.detail.status_inactive"},
+      {"id": "workflow_version", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.detail.version|value={{workflow?.data?.metadata?.version ?? workflow?.data?.version ?? ''}}"},
+      {"id": "workflow_created_at", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.detail.created_at|value={{workflow?.data?.created_at ?? ''}}"},
+      {"id": "workflow_updated_at", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.detail.updated_at|value={{workflow?.data?.updated_at ?? ''}}"},
+      {"id": "workflow_creator", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.detail.creator|value={{workflow?.data?.creator?.name ?? ''}}"},
+      {"id": "workflow_updater", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.detail.updater|value={{workflow?.data?.updater?.name ?? ''}}"}
+    ]},
+    {"id": "condition_summary", "type": "basic", "name": "Section", "props": {"className": "admin-card workflow-condition-summary"}, "children": [
+      {"id": "condition_title", "type": "basic", "name": "H3", "text": "$t:glitter-workflow.admin.workflows.detail.condition_summary"},
+      {"id": "condition_groups", "type": "basic", "name": "Div", "iteration": {"source": "workflow?.data?.condition_summary?.children ?? []", "item_var": "condition_group", "index_var": "condition_group_index"}, "children": [
+        {"id": "condition_group_all", "type": "basic", "name": "Span", "if": "{{condition_group.kind === 'group' && condition_group.group === 'all'}}", "text": "$t:glitter-workflow.admin.workflows.groups.all"},
+        {"id": "condition_group_any", "type": "basic", "name": "Span", "if": "{{condition_group.kind === 'group' && condition_group.group === 'any'}}", "text": "$t:glitter-workflow.admin.workflows.groups.any"},
+        {"id": "condition_group_predicate", "type": "basic", "name": "Span", "if": "{{condition_group.kind === 'predicate'}}", "text": "$t:glitter-workflow.admin.workflows.detail.predicate_order|value={{condition_group.order}}"},
+        {"id": "condition_group_children", "type": "basic", "name": "Div", "iteration": {"source": "condition_group.children ?? []", "item_var": "condition_child", "index_var": "condition_child_index"}, "children": [
+          {"id": "condition_child_all", "type": "basic", "name": "Span", "if": "{{condition_child.kind === 'group' && condition_child.group === 'all'}}", "text": "$t:glitter-workflow.admin.workflows.groups.all"},
+          {"id": "condition_child_any", "type": "basic", "name": "Span", "if": "{{condition_child.kind === 'group' && condition_child.group === 'any'}}", "text": "$t:glitter-workflow.admin.workflows.groups.any"},
+          {"id": "condition_child_order", "type": "basic", "name": "Span", "if": "{{condition_child.kind === 'predicate'}}", "text": "$t:glitter-workflow.admin.workflows.detail.predicate_order|value={{condition_child.order}}"},
+          {"id": "condition_child_field", "type": "basic", "name": "Span", "if": "{{condition_child.kind === 'predicate'}}", "text": "$t:glitter-workflow.admin.workflows.detail.predicate_field|value={{condition_child.field}}"},
+          {"id": "condition_child_operator", "type": "basic", "name": "Span", "if": "{{condition_child.kind === 'predicate'}}", "text": "$t:glitter-workflow.admin.workflows.detail.predicate_operator|value={{condition_child.operator}}"},
+          {"id": "condition_child_value", "type": "basic", "name": "Span", "if": "{{condition_child.kind === 'predicate'}}", "text": "$t:glitter-workflow.admin.workflows.detail.predicate_value|value={{condition_child.value}}"}
+        ]}
+      ]}
+    ]},
+    {"id": "action_summary", "type": "basic", "name": "Section", "props": {"className": "admin-card workflow-action-summary"}, "children": [
+      {"id": "action_title", "type": "basic", "name": "H3", "text": "$t:glitter-workflow.admin.workflows.detail.action_summary"},
+      {"id": "action_items", "type": "basic", "name": "Div", "iteration": {"source": "workflow?.data?.action_summary ?? []", "item_var": "action_item", "index_var": "action_index"}, "children": [
+        {"id": "action_index", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.workflows.detail.action_index|value={{action_item.index}}"},
+        {"id": "action_delay", "type": "basic", "name": "Span", "if": "{{action_item.type === 'delay'}}", "text": "$t:glitter-workflow.admin.workflows.detail.delay_seconds|value={{action_item.delay_seconds}}"},
+        {"id": "action_webhook", "type": "basic", "name": "Span", "if": "{{action_item.type === 'webhook'}}", "text": "$t:glitter-workflow.admin.workflows.detail.webhook_connection|value={{action_item.connection_key ?? ''}}"},
+        {"id": "action_webhook_bindings", "type": "basic", "name": "Span", "if": "{{action_item.type === 'webhook'}}", "text": "$t:glitter-workflow.admin.workflows.detail.webhook_bindings|value={{(action_item.body_bindings ?? []).join(', ')}}"}
+      ]}
+    ]}
+  ]}]}
+}

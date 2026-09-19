@@ -1,0 +1,48 @@
+{
+  "version": "1.0.0",
+  "layout_name": "admin_workflow_settings",
+  "permissions": ["glitter-workflow.settings.read"],
+  "extends": "_admin_base",
+  "meta": {"title": "$t:glitter-workflow.admin.settings.title", "description": "$t:glitter-workflow.admin.settings.description"},
+  "initLocal": {"form": {"max_actions_per_workflow": 25, "max_condition_depth": 5}, "isSaving": false, "errors": null},
+  "transition_overlay": {"wait_for": ["settings"]},
+  "data_sources": [{
+    "id": "settings",
+    "label_key": "$t:glitter-workflow.editor.data_source.settings",
+    "type": "api",
+    "endpoint": "/api/modules/glitter-workflow/admin/settings",
+    "method": "GET",
+    "auto_fetch": true,
+    "auth_required": true,
+    "initLocal": "form",
+    "refetchOnMount": true,
+    "errorHandling": {"403": {"handler": "showErrorPage", "params": {"target": "content"}}, "default": {"handler": "showErrorPage", "params": {"target": "content"}}}
+  }],
+  "slots": {"content": [{
+    "id": "admin_workflow_settings_content",
+    "type": "basic",
+    "name": "Div",
+    "props": {"className": "admin-page-content"},
+    "children": [
+      {"id": "page_header", "type": "composite", "name": "PageHeader", "props": {"title": "$t:glitter-workflow.admin.settings.title", "description": "$t:glitter-workflow.admin.settings.description"}},
+      {"id": "settings_form", "type": "basic", "name": "Form", "props": {"className": "workflow-settings-form"}, "children": [
+        {"id": "max_actions_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [
+          {"type": "basic", "name": "Label", "props": {"className": "form-label"}, "text": "$t:glitter-workflow.admin.settings.max_actions_per_workflow_label"},
+          {"id": "max_actions_per_workflow", "type": "basic", "name": "Input", "props": {"type": "number", "name": "max_actions_per_workflow", "value": "{{_local.form?.max_actions_per_workflow ?? 25}}", "disabled": "{{settings?.data?.abilities?.can_update !== true}}"}, "actions": [{"type": "change", "handler": "setState", "params": {"target": "local", "form.max_actions_per_workflow": "{{Number($event.target.value)}}"}}]},
+          {"id": "max_actions_error", "type": "basic", "name": "Span", "if": "{{_local.errors?.max_actions_per_workflow}}", "props": {"className": "form-error"}, "text": "{{_local.errors?.max_actions_per_workflow?.[0] ?? ''}}"}
+        ]},
+        {"id": "max_condition_depth_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [
+          {"type": "basic", "name": "Label", "props": {"className": "form-label"}, "text": "$t:glitter-workflow.admin.settings.max_condition_depth_label"},
+          {"id": "max_condition_depth", "type": "basic", "name": "Input", "props": {"type": "number", "name": "max_condition_depth", "value": "{{_local.form?.max_condition_depth ?? 5}}", "disabled": "{{settings?.data?.abilities?.can_update !== true}}"}, "actions": [{"type": "change", "handler": "setState", "params": {"target": "local", "form.max_condition_depth": "{{Number($event.target.value)}}"}}]},
+          {"id": "max_condition_depth_error", "type": "basic", "name": "Span", "if": "{{_local.errors?.max_condition_depth}}", "props": {"className": "form-error"}, "text": "{{_local.errors?.max_condition_depth?.[0] ?? ''}}"}
+        ]},
+        {"id": "max_recursion_depth_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "max_recursion_depth", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.settings.max_workflow_recursion_depth|value={{settings?.data?.max_workflow_recursion_depth ?? 0}}"}]},
+        {"id": "connections_count_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "connections_count", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.settings.connections_count|value={{settings?.data?.connections?.count ?? 0}}"}]},
+        {"id": "save", "type": "basic", "name": "Button", "if": "{{settings?.data?.abilities?.can_update === true}}", "props": {"type": "button", "disabled": "{{_local.isSaving}}", "className": "btn btn-primary"}, "actions": [{"type": "click", "handler": "sequence", "params": {"actions": [
+          {"handler": "setState", "params": {"target": "local", "isSaving": true, "errors": null}},
+          {"handler": "apiCall", "auth_required": true, "target": "/api/modules/glitter-workflow/admin/settings", "params": {"method": "PUT", "body": {"max_actions_per_workflow": "{{_local.form?.max_actions_per_workflow}}", "max_condition_depth": "{{_local.form?.max_condition_depth}}"}}, "onSuccess": [{"handler": "setState", "params": {"target": "local", "isSaving": false}}, {"handler": "refetchDataSource", "params": {"dataSourceId": "settings"}}, {"handler": "toast", "params": {"type": "success", "message": "$t:glitter-workflow.admin.settings.save_success"}}], "onError": [{"handler": "setState", "params": {"target": "local", "isSaving": false, "errors": "{{error.errors}}"}}, {"handler": "toast", "params": {"type": "error", "message": "$t:glitter-workflow.admin.settings.save_error"}}]}
+        ]}}], "children": [{"id": "save_label", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.settings.save"}]}
+      ]}
+    ]
+  }]}
+}

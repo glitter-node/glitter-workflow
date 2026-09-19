@@ -1,0 +1,212 @@
+{
+  "admin": {
+    "workflows": {
+      "title": "워크플로",
+      "description": "워크플로 정의를 관리합니다",
+      "create": "워크플로 생성",
+      "edit": "워크플로 수정",
+      "editor_title": "워크플로 빌더",
+      "name": "이름",
+      "when": "언제",
+      "if_group": "조건",
+      "then": "실행",
+      "save": "저장",
+      "activate": "활성화",
+      "deactivate": "비활성화",
+      "delete": "삭제",
+      "activate_success": "워크플로가 활성화되었습니다",
+      "deactivate_success": "워크플로가 비활성화되었습니다",
+      "activate_confirm": "이 워크플로를 활성화하시겠습니까?",
+      "deactivate_confirm": "이 워크플로를 비활성화하시겠습니까?",
+      "delete_success": "워크플로가 삭제되었습니다",
+      "delete_confirm": "이 워크플로를 삭제하시겠습니까?",
+      "save_error": "워크플로를 저장하지 못했습니다.",
+      "stale_error": "다른 곳에서 워크플로가 변경되었습니다. 입력한 내용은 유지했으니 검토 후 다시 제출하세요.",
+      "lifecycle_error": "워크플로 작업을 완료하지 못했습니다.",
+      "delay_seconds": "지연(초)",
+      "index": {
+        "title": "워크플로 목록",
+        "description": "워크플로 정의와 실행 설정을 관리합니다.",
+        "empty_title": "아직 워크플로가 없습니다",
+        "empty_description": "이벤트와 액션을 자동화하려면 워크플로를 생성하세요.",
+        "columns": {
+          "trigger": "트리거",
+          "status": "상태"
+        },
+        "filters": {
+          "status": {
+            "label": "상태 필터",
+            "all": "전체 상태",
+            "active": "활성",
+            "inactive": "비활성"
+          },
+            "trigger": {
+                "label": "트리거 필터",
+                "all": "전체 트리거"
+            },
+            "search": {
+                "placeholder": "워크플로 이름 또는 UUID로 검색"
+            }
+        },
+        "status": {
+          "active": "활성",
+          "inactive": "비활성"
+        }
+      },
+      "create_page": {
+        "title": "워크플로 생성",
+        "description": "새 워크플로의 트리거, 조건, 액션을 설정합니다."
+      },
+      "detail": {
+        "title": "워크플로 상세",
+        "description": "선택한 워크플로 정의를 확인합니다.",
+        "summary": "안전한 워크플로 요약",
+        "name": "이름: {value}",
+        "trigger": "트리거:",
+        "version": "버전: {value}",
+        "action_count": "액션 수: :value",
+        "status_active": "상태: 활성",
+        "status_inactive": "상태: 비활성",
+        "created_at": "생성일: {value}",
+        "updated_at": "수정일: {value}",
+        "creator": "생성자: {value}",
+        "updater": "수정자: {value}",
+        "condition_summary": "조건",
+        "predicate_order": "조건 순서: {value}",
+        "predicate_field": "필드: {value}",
+        "predicate_operator": "연산자: {value}",
+        "predicate_value": "값: {value}",
+        "action_summary": "액션",
+        "action_index": "액션 순서: {value}",
+        "delay_seconds": "지연 초: {value}",
+        "webhook_connection": "웹훅 연결: {value}",
+        "webhook_bindings": "웹훅 바인딩: {value}"
+      },
+      "edit_page": {
+        "title": "워크플로 수정",
+        "description": "선택한 워크플로 정의를 수정합니다."
+      },
+      "triggers": {
+        "user_registered": "회원 가입",
+        "user_updated": "회원 정보 수정",
+        "board_post_created": "게시글 작성",
+        "board_comment_created": "댓글 작성"
+      },
+      "groups": {
+        "all": "모든 조건",
+        "any": "하나 이상의 조건"
+      },
+      "actions": {
+        "webhook": "웹훅",
+        "delay": "지연"
+      }
+    },
+    "executions": {
+      "index": {
+        "title": "워크플로 실행 기록",
+        "description": "워크플로 실행 이력을 확인합니다.",
+        "empty_title": "실행 기록이 없습니다",
+    "empty_description": "워크플로가 실행되면 이곳에 실행 기록이 표시됩니다.",
+    "filters": {
+      "status": {
+        "label": "상태 필터",
+        "all": "전체 상태",
+        "pending": "대기",
+        "scheduled": "예약",
+        "running": "실행 중",
+        "succeeded": "성공",
+        "failed": "실패",
+        "cancelled": "취소",
+        "skipped": "건너뜀"
+      },
+      "trigger": {
+        "label": "트리거 필터",
+        "all": "전체 트리거"
+      }
+    }
+      },
+      "columns": {
+        "uuid": "실행 UUID",
+        "workflow": "워크플로",
+        "trigger": "트리거",
+        "status": "상태",
+        "created": "생성",
+        "started": "시작",
+        "completed": "완료"
+      },
+      "detail": {
+        "title": "실행 상세",
+        "description": "선택한 워크플로 실행을 확인합니다.",
+        "uuid": "실행: {value}",
+        "workflow": "워크플로: {value}",
+        "trigger": "트리거: {value}",
+        "status": "상태: {value}",
+        "started": "시작: {value}",
+        "completed": "완료: {value}",
+        "trace": "실행 추적 메타데이터",
+        "workflow_uuid": "워크플로 UUID: {value}",
+        "workflow_version": "워크플로 버전: {value}",
+        "correlation_id": "상관관계 ID: {value}",
+        "causation_id": "원인 실행 ID: {value}",
+        "depth": "깊이: {value}",
+        "scheduled_at": "예약: {value}",
+        "created_at": "생성: {value}",
+        "updated_at": "수정: {value}",
+        "error_code": "오류 코드: {value}",
+        "actions": "액션 실행",
+        "actions_empty": "액션 실행 기록이 없습니다",
+        "action_index": "순서",
+        "action_type": "액션",
+        "action_status": "상태",
+        "attempts": "시도 횟수",
+        "action_scheduled": "예약",
+        "action_error_code": "오류 코드",
+        "delay_seconds": "지연 초",
+        "status_code": "HTTP 상태: {value}",
+        "response_bytes": "응답 바이트: {value}",
+        "acceptance": "관련 수락 기록",
+        "acceptance_uuid": "수락 UUID: {value}",
+        "acceptance_source": "소스: {value}",
+        "acceptance_status": "수락 상태: {value}",
+        "acceptance_attempts": "수락 시도 횟수: {value}",
+        "acceptance_available": "사용 가능: {value}",
+        "acceptance_claimed": "점유: {value}",
+        "acceptance_processed": "처리: {value}",
+        "acceptance_error_code": "오류 코드: {value}"
+      }
+    },
+    "settings": {
+      "title": "워크플로 설정",
+      "description": "워크플로 제한을 확인하고 수정합니다.",
+      "max_actions_per_workflow": "워크플로당 최대 액션: {value}",
+      "max_actions_per_workflow_label": "워크플로당 최대 액션",
+      "max_condition_depth": "조건 최대 깊이: {value}",
+      "max_condition_depth_label": "조건 최대 깊이",
+      "max_workflow_recursion_depth": "워크플로 재귀 최대 깊이: {value}",
+      "connections_count": "연결 수: {value}",
+      "save": "설정 저장",
+      "save_success": "워크플로 설정이 저장되었습니다",
+      "save_error": "워크플로 설정을 저장하지 못했습니다"
+    }
+  },
+  "editor": {
+    "data_source": {
+      "workflows": "워크플로",
+      "executions": "워크플로 실행",
+      "execution": "워크플로 실행",
+      "settings": "워크플로 설정"
+    },
+    "state": {
+      "workflows_populated": "워크플로 데이터 있음",
+      "workflows_empty": "빈 워크플로 목록",
+      "workflows_without_create": "생성 권한 없음"
+    }
+  },
+  "activity_log": {
+    "create": "워크플로 :name이 생성되었습니다",
+    "update": "워크플로 :name이 수정되었습니다",
+    "delete": "워크플로 :name이 삭제되었습니다",
+    "activate": "워크플로 :name이 활성화되었습니다",
+    "deactivate": "워크플로 :name이 비활성화되었습니다"
+  }
+}
