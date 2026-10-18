@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Glitter Workflow</title>
+  <desc id="desc">A trigger connects through a condition diamond to two sequential action nodes and a completed execution.</desc>
+  <rect width="512" height="512" rx="112" fill="#111827"/>
+  <path d="M256 142V180M256 260V292M256 358V382" fill="none" stroke="#64748B" stroke-width="18" stroke-linecap="round"/>
+  <path d="m243 169 13 13 13-13M243 281l13 13 13-13M243 371l13 13 13-13" fill="none" stroke="#64748B" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="200" y="74" width="112" height="68" rx="24" fill="#38BDF8"/>
+  <path d="m262 89-27 32h22l-7 14 29-34h-22z" fill="#0F172A"/>
+  <path d="M256 174 322 222 256 270 190 222Z" fill="#FBBF24"/>
+  <path d="m238 221 12 12 26-26" fill="none" stroke="#111827" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="134" y="292" width="244" height="66" rx="23" fill="#14B8A6"/>
+  <circle cx="178" cy="325" r="16" fill="#0F172A"/>
+  <circle cx="256" cy="325" r="16" fill="#0F172A"/>
+  <circle cx="334" cy="325" r="16" fill="#0F172A"/>
+  <path d="M198 325h38m40 0h38" stroke="#0F172A" stroke-width="10" stroke-linecap="round"/>
+  <rect x="198" y="382" width="116" height="66" rx="23" fill="#E2E8F0"/>
+  <path d="m226 415 20 18 39-41" fill="none" stroke="#0F766E" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
