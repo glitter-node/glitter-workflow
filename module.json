@@ -1,0 +1,21 @@
+{
+    "identifier": "glitter-workflow",
+    "vendor": "Glitter.kr",
+    "name": {
+        "ko": "Glitter Workflow",
+        "en": "Glitter Workflow"
+    },
+  "version": "0.18.0",
+    "license": "MIT",
+    "description": {
+        "ko": "이벤트와 작업을 자동화하는 워크플로",
+        "en": "Workflows that automate events and actions"
+    },
+    "g7_version": ">=7.0.11",
+    "dependencies": {
+        "modules": {
+            "sirsoft-board": ">=1.1.2"
+        },
+        "plugins": {}
+    }
+}

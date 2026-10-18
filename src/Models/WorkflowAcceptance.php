@@ -1,0 +1,4 @@
+<?php
+namespace Modules\Glitter\Workflow\Models;
+use Illuminate\Database\Eloquent\Model; use Illuminate\Database\Eloquent\Relations\HasMany; use Modules\Glitter\Workflow\Enums\AcceptanceStatus; use Modules\Glitter\Workflow\Models\Concerns\HasWorkflowUuid;
+class WorkflowAcceptance extends Model { use HasWorkflowUuid; protected $table='glitter_workflow_acceptances'; protected $fillable=['uuid','source_key','schema_version','source_event_id','source_subject_type','source_subject_id','trigger_context','status','attempts','available_at','claimed_at','processed_at','last_error_code','last_error_message']; protected function casts():array{return ['schema_version'=>'integer','trigger_context'=>'array','status'=>AcceptanceStatus::class,'attempts'=>'integer','available_at'=>'datetime','claimed_at'=>'datetime','processed_at'=>'datetime'];} public function executions():HasMany{return $this->hasMany(WorkflowExecution::class,'acceptance_id');} }

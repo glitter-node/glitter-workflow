@@ -1,0 +1,1 @@
+{"type":"Page","props":{"title":"$t:glitter-workflow.admin.workflows.title"},"children":[{"type":"PageHeader","props":{"title":"$t:glitter-workflow.admin.workflows.title","description":"$t:glitter-workflow.admin.workflows.description"}}]}

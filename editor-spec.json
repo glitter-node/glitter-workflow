@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "moduleId": "glitter-workflow",
+  "version": "1.0.0",
+  "description": "Glitter Workflow layout editor samples for the admin workflow list.",
+  "sampleData": {
+    "comment": "Editor-only workflow list samples matching the API collection response.",
+    "byDataSourceId": {
+      "workflows": {
+        "data": {
+          "data": [
+            {
+              "uuid": "00000000-0000-4000-8000-000000000101",
+              "name": "Welcome workflow",
+              "trigger_key": "user.registered",
+              "trigger_config": {},
+              "condition_tree": {},
+              "action_plan": [],
+              "version": 1,
+              "is_active": true,
+              "creator": {
+                "uuid": "00000000-0000-4000-8000-000000000001",
+                "name": "Administrator"
+              },
+              "updater": {
+                "uuid": "00000000-0000-4000-8000-000000000001",
+                "name": "Administrator"
+              },
+              "created_at": "2026-09-18T12:00:00+00:00",
+              "updated_at": "2026-09-18T12:00:00+00:00"
+            },
+            {
+              "uuid": "00000000-0000-4000-8000-000000000102",
+              "name": "Published post workflow",
+              "trigger_key": "board.post.created",
+              "trigger_config": {},
+              "condition_tree": {},
+              "action_plan": [],
+              "version": 1,
+              "is_active": false,
+              "creator": {
+                "uuid": "00000000-0000-4000-8000-000000000001",
+                "name": "Administrator"
+              },
+              "updater": {
+                "uuid": "00000000-0000-4000-8000-000000000001",
+                "name": "Administrator"
+              },
+              "created_at": "2026-09-18T12:05:00+00:00",
+              "updated_at": "2026-09-18T12:05:00+00:00"
+            }
+          ],
+          "pagination": {
+            "current_page": 1,
+            "per_page": 20,
+            "from": 1,
+            "to": 2,
+            "has_more_pages": false,
+            "last_page": 1,
+            "total": 2
+          },
+          "abilities": {
+            "can_create": true
+          }
+        }
+      }
+    }
+  },
+  "states": {
+    "comment": "Populated, empty, and create-forbidden admin workflow list previews.",
+    "groups": [
+      {
+        "scope": {
+          "kind": "route",
+          "match": "*/admin/glitter-workflow/workflows"
+        },
+        "items": [
+          {
+            "id": "workflows_populated",
+            "label": "$t:glitter-workflow.editor.state.workflows_populated",
+            "default": true
+          },
+          {
+            "id": "workflows_empty",
+            "label": "$t:glitter-workflow.editor.state.workflows_empty",
+            "sampleDataOverrides": {
+              "byDataSourceId": {
+                "workflows": {
+                  "data": {
+                    "data": [],
+                    "pagination": {
+                      "current_page": 1,
+                      "per_page": 20,
+                      "from": null,
+                      "to": null,
+                      "has_more_pages": false,
+                      "last_page": 1,
+                      "total": 0
+                    },
+                    "abilities": {
+                      "can_create": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "id": "workflows_without_create",
+            "label": "$t:glitter-workflow.editor.state.workflows_without_create",
+            "sampleDataOverrides": {
+              "byDataSourceId": {
+                "workflows": {
+                  "data": {
+                    "data": [
+                      {
+                        "uuid": "00000000-0000-4000-8000-000000000101",
+                        "name": "Welcome workflow",
+                        "trigger_key": "user.registered",
+                        "trigger_config": {},
+                        "condition_tree": {},
+                        "action_plan": [],
+                        "version": 1,
+                        "is_active": true,
+                        "creator": {
+                          "uuid": "00000000-0000-4000-8000-000000000001",
+                          "name": "Administrator"
+                        },
+                        "updater": {
+                          "uuid": "00000000-0000-4000-8000-000000000001",
+                          "name": "Administrator"
+                        },
+                        "created_at": "2026-09-18T12:00:00+00:00",
+                        "updated_at": "2026-09-18T12:00:00+00:00"
+                      }
+                    ],
+                    "pagination": {
+                      "current_page": 1,
+                      "per_page": 20,
+                      "from": 1,
+                      "to": 1,
+                      "has_more_pages": false,
+                      "last_page": 1,
+                      "total": 1
+                    },
+                    "abilities": {
+                      "can_create": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

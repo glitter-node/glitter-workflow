@@ -1,0 +1,212 @@
+{
+  "admin": {
+    "workflows": {
+      "title": "Workflows",
+      "description": "Manage workflow definitions",
+      "create": "Create workflow",
+      "edit": "Edit workflow",
+      "editor_title": "Workflow builder",
+      "name": "Name",
+      "when": "When",
+      "if_group": "If",
+      "then": "Then",
+      "save": "Save",
+      "activate": "Activate",
+      "deactivate": "Deactivate",
+      "delete": "Delete",
+      "activate_success": "Workflow activated",
+      "deactivate_success": "Workflow deactivated",
+      "activate_confirm": "Activate this workflow?",
+      "deactivate_confirm": "Deactivate this workflow?",
+      "delete_success": "Workflow deleted",
+      "delete_confirm": "Delete this workflow?",
+      "save_error": "The workflow could not be saved.",
+      "stale_error": "This workflow changed elsewhere. Your local edits were kept; review and submit again.",
+      "lifecycle_error": "The workflow action could not be completed.",
+      "delay_seconds": "Delay (seconds)",
+      "index": {
+        "title": "Workflows",
+        "description": "Manage workflow definitions and their execution settings.",
+        "empty_title": "No workflows yet",
+        "empty_description": "Create a workflow to start automating events and actions.",
+        "columns": {
+          "trigger": "Trigger",
+          "status": "Status"
+        },
+        "filters": {
+          "status": {
+            "label": "Status",
+            "all": "All statuses",
+            "active": "Active",
+            "inactive": "Inactive"
+          },
+          "trigger": {
+            "label": "Trigger",
+            "all": "All triggers"
+          },
+          "search": {
+            "placeholder": "Search by workflow name or UUID"
+          }
+        },
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive"
+        }
+      },
+      "create_page": {
+        "title": "Create workflow",
+        "description": "Set a trigger, conditions, and actions for a new workflow."
+      },
+      "detail": {
+        "title": "Workflow details",
+        "description": "View the selected workflow definition.",
+        "summary": "Safe workflow summary",
+        "name": "Name: {value}",
+        "trigger": "Trigger:",
+        "version": "Version: {value}",
+        "action_count": "Actions: :value",
+        "status_active": "Status: Active",
+        "status_inactive": "Status: Inactive",
+        "created_at": "Created: {value}",
+        "updated_at": "Updated: {value}",
+        "creator": "Created by: {value}",
+        "updater": "Updated by: {value}",
+        "condition_summary": "Conditions",
+        "predicate_order": "Condition order: {value}",
+        "predicate_field": "Field: {value}",
+        "predicate_operator": "Operator: {value}",
+        "predicate_value": "Value: {value}",
+        "action_summary": "Actions",
+        "action_index": "Action index: {value}",
+        "delay_seconds": "Delay seconds: {value}",
+        "webhook_connection": "Webhook connection: {value}",
+        "webhook_bindings": "Webhook bindings: {value}"
+      },
+      "edit_page": {
+        "title": "Edit workflow",
+        "description": "Update the selected workflow definition."
+      },
+      "triggers": {
+        "user_registered": "User registered",
+        "user_updated": "User updated",
+        "board_post_created": "Board post created",
+        "board_comment_created": "Board comment created"
+      },
+      "groups": {
+        "all": "All conditions",
+        "any": "Any condition"
+      },
+      "actions": {
+        "webhook": "Webhook",
+        "delay": "Delay"
+      }
+    },
+    "executions": {
+      "index": {
+        "title": "Workflow executions",
+        "description": "View workflow execution history.",
+        "empty_title": "No executions yet",
+    "empty_description": "Workflow execution history will appear here after a workflow runs.",
+    "filters": {
+      "status": {
+        "label": "Status filter",
+        "all": "All statuses",
+        "pending": "Pending",
+        "scheduled": "Scheduled",
+        "running": "Running",
+        "succeeded": "Succeeded",
+        "failed": "Failed",
+        "cancelled": "Cancelled",
+        "skipped": "Skipped"
+      },
+      "trigger": {
+        "label": "Trigger filter",
+        "all": "All triggers"
+      }
+    }
+      },
+      "columns": {
+        "uuid": "Execution UUID",
+        "workflow": "Workflow",
+        "trigger": "Trigger",
+        "status": "Status",
+        "created": "Created",
+        "started": "Started",
+        "completed": "Completed"
+      },
+      "detail": {
+        "title": "Execution details",
+        "description": "View the selected workflow execution.",
+        "uuid": "Execution: {value}",
+        "workflow": "Workflow: {value}",
+        "trigger": "Trigger: {value}",
+        "status": "Status: {value}",
+        "started": "Started: {value}",
+        "completed": "Completed: {value}",
+        "trace": "Execution trace metadata",
+        "workflow_uuid": "Workflow UUID: {value}",
+        "workflow_version": "Workflow version: {value}",
+        "correlation_id": "Correlation ID: {value}",
+        "causation_id": "Causation ID: {value}",
+        "depth": "Depth: {value}",
+        "scheduled_at": "Scheduled: {value}",
+        "created_at": "Created: {value}",
+        "updated_at": "Updated: {value}",
+        "error_code": "Error code: {value}",
+        "actions": "Action executions",
+        "actions_empty": "No action executions",
+        "action_index": "Order",
+        "action_type": "Action",
+        "action_status": "Status",
+        "attempts": "Attempts",
+        "action_scheduled": "Scheduled",
+        "action_error_code": "Error code",
+        "delay_seconds": "Delay seconds",
+        "status_code": "HTTP status: {value}",
+        "response_bytes": "Response bytes: {value}",
+        "acceptance": "Related acceptance",
+        "acceptance_uuid": "Acceptance UUID: {value}",
+        "acceptance_source": "Source: {value}",
+        "acceptance_status": "Acceptance status: {value}",
+        "acceptance_attempts": "Acceptance attempts: {value}",
+        "acceptance_available": "Available: {value}",
+        "acceptance_claimed": "Claimed: {value}",
+        "acceptance_processed": "Processed: {value}",
+        "acceptance_error_code": "Error code: {value}"
+      }
+    },
+    "settings": {
+      "title": "Workflow settings",
+      "description": "View and update workflow limits.",
+      "max_actions_per_workflow": "Max actions per workflow: {value}",
+      "max_actions_per_workflow_label": "Max actions per workflow",
+      "max_condition_depth": "Max condition depth: {value}",
+      "max_condition_depth_label": "Max condition depth",
+      "max_workflow_recursion_depth": "Max workflow recursion depth: {value}",
+      "connections_count": "Connections: {value}",
+      "save": "Save settings",
+      "save_success": "Workflow settings saved",
+      "save_error": "Workflow settings could not be saved"
+    }
+  },
+  "editor": {
+    "data_source": {
+      "workflows": "Workflows",
+      "executions": "Workflow executions",
+      "execution": "Workflow execution",
+      "settings": "Workflow settings"
+    },
+    "state": {
+      "workflows_populated": "Workflows with data",
+      "workflows_empty": "Empty workflow list",
+      "workflows_without_create": "Without create permission"
+    }
+  },
+  "activity_log": {
+    "create": "Workflow :name was created",
+    "update": "Workflow :name was updated",
+    "delete": "Workflow :name was deleted",
+    "activate": "Workflow :name was activated",
+    "deactivate": "Workflow :name was deactivated"
+  }
+}

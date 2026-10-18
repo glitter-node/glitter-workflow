@@ -1,0 +1,2 @@
+<?php
+namespace Modules\Glitter\Workflow\Http\Requests; use Illuminate\Foundation\Http\FormRequest; class StoreWorkflowRequest extends FormRequest { public function authorize():bool{return true;} public function rules():array{return ['name'=>['required','string','max:200'],'trigger_key'=>['required','string'],'trigger_config'=>['nullable','array'],'condition_tree'=>['nullable','array'],'action_plan'=>['required','array']];} }

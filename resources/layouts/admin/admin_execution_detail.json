@@ -1,0 +1,76 @@
+{
+  "version": "1.0.0",
+  "layout_name": "admin_execution_detail",
+  "permissions": ["glitter-workflow.executions.read"],
+  "extends": "_admin_base",
+  "meta": {"title": "$t:glitter-workflow.admin.executions.detail.title", "description": "$t:glitter-workflow.admin.executions.detail.description"},
+  "transition_overlay": {"wait_for": ["execution"]},
+  "data_sources": [{
+    "id": "execution",
+    "label_key": "$t:glitter-workflow.editor.data_source.execution",
+    "type": "api",
+    "endpoint": "/api/modules/glitter-workflow/admin/executions/{{route?.uuid}}",
+    "method": "GET",
+    "auto_fetch": true,
+    "auth_required": true,
+    "refetchOnMount": true,
+    "errorHandling": {"403": {"handler": "showErrorPage", "params": {"target": "content"}}, "404": {"handler": "showErrorPage", "params": {"target": "content"}}}
+  }],
+  "slots": {"content": [{
+    "id": "admin_execution_detail_content",
+    "type": "basic",
+    "name": "Div",
+    "props": {"className": "admin-page-content"},
+    "children": [
+      {"id": "page_header", "type": "composite", "name": "PageHeader", "props": {"title": "$t:glitter-workflow.admin.executions.detail.title", "description": "$t:glitter-workflow.admin.executions.detail.description"}},
+      {"id": "execution_summary", "type": "basic", "name": "Section", "props": {"className": "admin-card"}, "children": [
+        {"id": "execution_uuid_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_uuid", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.uuid|value={{execution?.data?.uuid ?? ''}}"}]},
+        {"id": "execution_workflow_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_workflow", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.workflow|value={{execution?.data?.workflow_name ?? ''}}"}]},
+        {"id": "execution_trigger_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_trigger", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.trigger|value={{execution?.data?.trigger_key ?? ''}}"}]},
+        {"id": "execution_status_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_status", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.status|value={{execution?.data?.status ?? ''}}"}]},
+        {"id": "execution_started_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_started", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.started|value={{execution?.data?.started_at ?? execution?.data?.created_at ?? ''}}"}]},
+        {"id": "execution_finished_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_finished", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.completed|value={{execution?.data?.finished_at ?? ''}}"}]}
+      ]},
+      {"id": "execution_trace_section", "type": "basic", "name": "Section", "props": {"className": "admin-card"}, "children": [
+        {"id": "execution_trace_title", "type": "basic", "name": "H3", "text": "$t:glitter-workflow.admin.executions.detail.trace"},
+        {"id": "execution_workflow_uuid_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_workflow_uuid", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.workflow_uuid|value={{execution?.data?.workflow_uuid ?? ''}}"}]},
+        {"id": "execution_workflow_version_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_workflow_version", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.workflow_version|value={{execution?.data?.workflow_version ?? 0}}"}]},
+        {"id": "execution_correlation_id_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_correlation_id", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.correlation_id|value={{execution?.data?.correlation_id ?? ''}}"}]},
+        {"id": "execution_causation_id_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_causation_id", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.causation_id|value={{execution?.data?.causation_id ?? ''}}"}]},
+        {"id": "execution_depth_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_depth", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.depth|value={{execution?.data?.depth ?? 0}}"}]},
+        {"id": "execution_scheduled_at_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_scheduled_at", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.scheduled_at|value={{execution?.data?.scheduled_at ?? ''}}"}]},
+        {"id": "execution_created_at_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_created_at", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.created_at|value={{execution?.data?.created_at ?? ''}}"}]},
+        {"id": "execution_updated_at_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_updated_at", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.updated_at|value={{execution?.data?.updated_at ?? ''}}"}]},
+        {"id": "execution_error_code_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "execution_error_code", "type": "basic", "name": "Span", "if": "{{execution?.data?.error_code !== null && execution?.data?.error_code !== undefined && execution?.data?.error_code !== ''}}", "text": "$t:glitter-workflow.admin.executions.detail.error_code|value={{execution?.data?.error_code}}"}]}
+      ]},
+      {"id": "action_executions_section", "type": "basic", "name": "Section", "props": {"className": "admin-card"}, "children": [
+        {"id": "action_executions_title", "type": "basic", "name": "H3", "text": "$t:glitter-workflow.admin.executions.detail.actions"},
+        {"id": "action_executions_empty", "type": "composite", "name": "EmptyState", "if": "{{(execution?.data?.action_executions ?? []).length === 0}}", "props": {"title": "$t:glitter-workflow.admin.executions.detail.actions_empty"}},
+        {"id": "action_executions_grid", "type": "composite", "name": "DataGrid", "if": "{{(execution?.data?.action_executions ?? []).length > 0}}", "props": {"columns": [
+          {"field": "action_index", "header": "$t:glitter-workflow.admin.executions.detail.action_index", "sortable": false},
+          {"field": "action_type", "header": "$t:glitter-workflow.admin.executions.detail.action_type", "sortable": false},
+          {"field": "status", "header": "$t:glitter-workflow.admin.executions.detail.action_status", "sortable": false},
+          {"field": "attempts", "header": "$t:glitter-workflow.admin.executions.detail.attempts", "sortable": false},
+          {"field": "scheduled_at", "header": "$t:glitter-workflow.admin.executions.detail.action_scheduled", "sortable": false, "cellChildren": [{"id": "action_scheduled_at", "type": "basic", "name": "Span", "if": "{{row.scheduled_at !== null && row.scheduled_at !== undefined && row.scheduled_at !== ''}}", "text": "$t:glitter-workflow.admin.executions.detail.scheduled_at|value={{row.scheduled_at}}"}]},
+          {"field": "started_at", "header": "$t:glitter-workflow.admin.executions.detail.started", "sortable": false},
+          {"field": "finished_at", "header": "$t:glitter-workflow.admin.executions.detail.completed", "sortable": false},
+          {"field": "error_code", "header": "$t:glitter-workflow.admin.executions.detail.action_error_code", "sortable": false, "cellChildren": [{"id": "action_error_code", "type": "basic", "name": "Span", "if": "{{row.error_code !== null && row.error_code !== undefined && row.error_code !== ''}}", "text": "$t:glitter-workflow.admin.executions.detail.error_code|value={{row.error_code}}"}]},
+          {"field": "delay_seconds", "header": "$t:glitter-workflow.admin.executions.detail.delay_seconds", "sortable": false, "cellChildren": [{"id": "action_delay_seconds", "type": "basic", "name": "Span", "if": "{{row.action_type === 'delay' && row.delay_seconds !== null && row.delay_seconds !== undefined}}", "text": "$t:glitter-workflow.admin.executions.detail.delay_seconds|value={{row.delay_seconds}}"}]},
+          {"field": "status_code", "header": "$t:glitter-workflow.admin.executions.detail.status_code", "sortable": false, "cellChildren": [{"id": "webhook_status_code", "type": "basic", "name": "Span", "if": "{{row.action_type === 'webhook' && row.status_code !== null && row.status_code !== undefined}}", "text": "$t:glitter-workflow.admin.executions.detail.status_code|value={{row.status_code}}"}]},
+          {"field": "response_bytes", "header": "$t:glitter-workflow.admin.executions.detail.response_bytes", "sortable": false, "cellChildren": [{"id": "webhook_response_bytes", "type": "basic", "name": "Span", "if": "{{row.action_type === 'webhook' && row.response_bytes !== null && row.response_bytes !== undefined}}", "text": "$t:glitter-workflow.admin.executions.detail.response_bytes|value={{row.response_bytes}}"}]}
+        ], "data": "{{execution?.data?.action_executions ?? []}}", "idField": "uuid", "responsiveBreakpoint": 768}}
+      ]},
+      {"id": "acceptance_summary", "type": "basic", "name": "Section", "if": "{{execution?.data?.acceptance !== null && execution?.data?.acceptance !== undefined}}", "props": {"className": "admin-card"}, "children": [
+        {"id": "acceptance_title", "type": "basic", "name": "H3", "text": "$t:glitter-workflow.admin.executions.detail.acceptance"},
+        {"id": "acceptance_uuid_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "acceptance_uuid", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.acceptance_uuid|value={{execution?.data?.acceptance?.uuid ?? ''}}"}]},
+        {"id": "acceptance_source_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "acceptance_source", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.acceptance_source|value={{execution?.data?.acceptance?.source_key ?? ''}}"}]},
+        {"id": "acceptance_status_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "acceptance_status", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.acceptance_status|value={{execution?.data?.acceptance?.status ?? ''}}"}]},
+        {"id": "acceptance_attempts_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "acceptance_attempts", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.acceptance_attempts|value={{execution?.data?.acceptance?.attempts ?? 0}}"}]},
+        {"id": "acceptance_available_at_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "acceptance_available_at", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.acceptance_available|value={{execution?.data?.acceptance?.available_at ?? ''}}"}]},
+        {"id": "acceptance_claimed_at_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "acceptance_claimed_at", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.acceptance_claimed|value={{execution?.data?.acceptance?.claimed_at ?? ''}}"}]},
+        {"id": "acceptance_processed_at_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "acceptance_processed_at", "type": "basic", "name": "Span", "text": "$t:glitter-workflow.admin.executions.detail.acceptance_processed|value={{execution?.data?.acceptance?.processed_at ?? ''}}"}]},
+        {"id": "acceptance_error_code_field", "type": "basic", "name": "Div", "props": {"className": "form-group"}, "children": [{"id": "acceptance_error_code", "type": "basic", "name": "Span", "if": "{{execution?.data?.acceptance?.error_code !== null && execution?.data?.acceptance?.error_code !== undefined && execution?.data?.acceptance?.error_code !== ''}}", "text": "$t:glitter-workflow.admin.executions.detail.acceptance_error_code|value={{execution?.data?.acceptance?.error_code}}"}]}
+      ]}
+    ]
+  }]}
+}
